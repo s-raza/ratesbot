@@ -24,9 +24,9 @@ FEATURES
 3. Extensible. New source websites for tradeable can be added by extending the RatesBot.Services.Service.ServiceBase base class.
 4. Basic testing using pytest.
 5. Configuration file for specifying :
- * Token for Telegram bot
- * Id of the chat(user or group) where the notification of a rate change will be sent
- * Database details for connecting to a MySQL database
+ - Token for Telegram bot
+ - Id of the chat(user or group) where the notification of a rate change will be sent
+ - Database details for connecting to a MySQL database
  
 =======
 LICENSE
