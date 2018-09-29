@@ -12,3 +12,4 @@ db = {'uname': '',
        'host': '',
        'name': ''}
        
+total_units = 1.00

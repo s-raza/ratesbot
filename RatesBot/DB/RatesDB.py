@@ -5,7 +5,7 @@ from RatesBot.Tools.LoggerLib import *
 from RatesBot.Tools.ScreenColors import clr
 import RatesBot.Config as cfg
 
-ratesdb_logger = colorlog.getLogger('Service_bot.ratesdb')
+ratesdb_logger = colorlog.getLogger('RatesBot.RatesDB')
 
 class RatesDB():
     

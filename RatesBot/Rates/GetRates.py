@@ -14,7 +14,7 @@ def check_rates():
         
     for service in ServiceBase.__subclasses__():
         
-        srv = service()
+        srv = service(total_units = cfg.total_units)
         
         srv.get_rates()
         

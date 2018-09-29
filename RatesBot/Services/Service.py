@@ -7,7 +7,7 @@ from RatesBot.DB.RatesDB import RatesDB
 
 import RatesBot.Config as cfg
 
-Service_logger = colorlog.getLogger('Service_bot')
+Service_logger = colorlog.getLogger('RatesBot.Service')
 #Service_logger.setLevel(logging.DEBUG)
 
             
@@ -21,7 +21,7 @@ class ServiceBase(object):
         
         self.service_name = kwargs['service_name']
         
-        self.total_units = kwargs['total_units'] if (kwargs.get('total_units') is not None) else 626.6
+        self.total_units = kwargs['total_units'] if (kwargs.get('total_units') is not None) else 1
         
         self.page = ""
         
@@ -159,13 +159,13 @@ class ServiceBase(object):
 class KTRates(ServiceBase):
     '''Class derived from ServiceBase. Retrieves gold rates from www.khaleejtimes.com'''
     
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         
         url = "http://www.khaleejtimes.com/gold-forex/"
         
         service_name = "Khaleej Times"
         
-        super(KTRates, self).__init__(url=url, service_name=service_name)
+        super(KTRates, self).__init__(url=url, service_name=service_name, *args, **kwargs)
         
         
         
@@ -196,13 +196,13 @@ class KTRates(ServiceBase):
 class GPDRates(ServiceBase):
     '''Class derived from ServiceBase. Retrieves gold rates from www.goldpricesdubai.com'''
     
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
     
         url = "http://www.goldpricesdubai.com/"
         
         service_name = "Gold Prices Dubai"
         
-        super(GPDRates, self).__init__(url=url, service_name=service_name)
+        super(GPDRates, self).__init__(url=url, service_name=service_name, *args, **kwargs)
         
         
     def get_rates(self):
