@@ -33,4 +33,10 @@ if __name__ == '__main__':
     parser.add_argument("-m","--minutes", help="Frequency of checking rates in minutes")
     args = parser.parse_args()
     
-    start(freq_mins=int(args.minutes))
+    if args.minutes is not None:
+        
+        start(freq_mins=int(args.minutes))
+        
+    else:
+        
+        start()
