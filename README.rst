@@ -16,6 +16,14 @@ Rename the Config_sample.py file to Config.py and edit it with required details.
 
     $ pip install python-telegram-bot sqlalchemy schedule bs4 requests mysql-python urllib2 colorlog
 
+**Write your first service**
+
+Inherit the the class *ServiceBase* available in *RatesBot.Services.Service* and override the *__init__()* and *get_rates()* methods to implement the extraction of rates from a web source for something that you need to be tracked. The rates can be taken from any online source like a website or an API that may be available for a service.
+
+Make sure that the *get_rate* method populates the fields - *_rate_morning, _rate_evening, _prices_text* and returns *prices_text*.
+
+Examples of 2 sources of gold rates are available in *RatesBot.Services.Service* - *class GPDRates(ServiceBase)* and *class KTRates(ServiceBase)*
+    
 ========
 FEATURES
 ========
@@ -27,7 +35,17 @@ FEATURES
  - Token for Telegram bot
  - Id of the chat(user or group) where the notification of a rate change will be sent
  - Database details for connecting to a MySQL database
- 
+
+=====
+TO DO
+=====
+1. Refactor code to comply with Python PEP 8
+2. Implement a better method for registering new sources whose rates need to be tracked. This needs to be more efficient, automated and programmer firendly.
+3. Add tests for the services.
+4. Installation script to implement automated start-up and shutd-own of the bot with the OS (systemctl)
+5. Log all quries to online sources and their results to file (/var/log/ratesbot)
+
+
 =======
 LICENSE
 =======
