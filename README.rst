@@ -24,7 +24,7 @@ Make sure that the *get_rate* method populates the fields - *_rate_morning, _rat
 
 Examples of 2 sources of gold rates are available in *RatesBot.Services.Service* - *class GPDRates(ServiceBase)* and *class KTRates(ServiceBase)*
 
-*Starting the Bot*
+**Starting the Bot**
 
 Time in minutes can be specified when running the bot from the command line. Once the below command is run, the bot will cycle through all the services that were defined as derived classes of the *ServiceBase* class, every number of minutes as specified. If there is a change in the rates a message will be send to the Telegram user of group which was specified in the Config.py file.
 
