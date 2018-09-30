@@ -5,6 +5,18 @@ This python program implements a simple and basic framework for periodically che
 
 For demonstration, the program currently scrapes 2 websites - www.khaleejtimes.com and www.goldpricesdubai.com to retrieve the gold rates, and sends a Telegram message if the rates have changed.
 
+========
+FEATURES
+========
+1. The frequency of checking rates from a website can be configured.
+2. Rates are logged to a MySQL database everytime they change (SQLAlchemy). This can be used for statistical analysis later.
+3. Extensible. New source websites for tradeable can be added by extending the RatesBot.Services.Service.ServiceBase base class.
+4. Basic testing using pytest.
+5. Configuration file for specifying :
+ - Token for Telegram bot
+ - Id of the chat(user or group) where the notification of a rate change will be sent
+ - Database details for connecting to a MySQL database
+
 ===============
 GETTING STARTED
 ===============
@@ -43,18 +55,6 @@ If the -m switch is not provided as shown below, the default frequency of checki
 .. code:: shell
 
     $ python start_bot.py
-
-========
-FEATURES
-========
-1. The frequency of checking rates from a website can be configured.
-2. Rates are logged to a MySQL database everytime they change (SQLAlchemy). This can be used for statistical analysis later.
-3. Extensible. New source websites for tradeable can be added by extending the RatesBot.Services.Service.ServiceBase base class.
-4. Basic testing using pytest.
-5. Configuration file for specifying :
- - Token for Telegram bot
- - Id of the chat(user or group) where the notification of a rate change will be sent
- - Database details for connecting to a MySQL database
 
 =====
 TO DO
