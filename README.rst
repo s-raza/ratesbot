@@ -22,6 +22,13 @@ GETTING STARTED
 ===============
 Rename the Config_sample.py file to Config.py and edit it with the required details.
 
+**Generate an authorization token for telegram bot**
+
+After installing the Telegram app on your mobile follow instructions `here <https://core.telegram.org/bots#6-botfather>`_ to generate an authorization token that is required to send requests to the Telegram bot API.
+
+Once you have the token, update the Config.py file with it.
+
+
 **Install dependencies using pip**
 
 .. code:: shell
