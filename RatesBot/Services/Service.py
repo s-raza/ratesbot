@@ -229,15 +229,16 @@ class GPDRates(ServiceBase):
     
         super(GPDRates, self).get_rates()
         
-        rates = self.soup.findAll('table',{'class':'now'})[0].findChildren('tr')[6].text.strip().split("\n")
+        
+        rates = [txt.text for txt in self.soup.findAll('table',{'class':'now'})[0].findChildren('tr')[6].findChildren('td')]
         
         self._prices_text += "\n{} gold prices updated\n".format(self.service_name)
         
-        self._prices_text += "\nMorning - {}\nEvening - {}".format(rates[1],rates[2])
+        self._prices_text += "\nMorning - {}\nEvening - {}".format(rates[0],rates[1])
         
-        self._rate_morning = self.format_rate(rates[1])
+        self._rate_morning = self.format_rate(rates[0])
         
-        self._rate_evening = self.format_rate(rates[2])
+        self._rate_evening = self.format_rate(rates[1])
         
         return self.prices_text
         
