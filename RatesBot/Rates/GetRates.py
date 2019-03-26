@@ -22,8 +22,12 @@ from RatesBot.Services.Service import *
 import telegram
 import RatesBot.Config as cfg
 
+Rates_logger = colorlog.getLogger('RatesBot.GetRates')
+#Service_logger.setLevel(logging.DEBUG)
+
 bot = telegram.Bot(token=cfg.bot_token)
 chat_id = cfg.chat_id
+
 
 
 def check_rates():
@@ -39,9 +43,12 @@ def check_rates():
         srv.get_rates()
         
         if srv.rates_changed():
-            print clr.red("Rates changed: ") + clr.yellow(srv.service_name + " Sending Message...\n") + srv.prices_text
+            Rates_logger.info("Rates changed: {}".format(srv.service_name))
+            Rates_logger.info("Sending Message: {}".format(srv.prices_text))
             bot.send_message(chat_id=chat_id, text=srv.prices_text)
         else:
-            print clr.blue("Rates not Changed ({}), ".format(srv.service_name)) + clr.yellow(srv.value_text)
+            Rates_logger.info("Rates not Changed ({})".format(srv.service_name))
+            
+            
                 
            

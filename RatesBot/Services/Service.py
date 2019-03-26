@@ -54,6 +54,10 @@ class ServiceBase(object):
         self._prices_text = ""
         
         self.db = RatesDB(db_uname=cfg.db['uname'],db_pass=cfg.db['pass'],db_host=cfg.db['host'],db_name=cfg.db['name'])
+        
+        self.user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+        
+        self.headers = {'User-Agent':self.user_agent,} 
 
     @property
     def rate_morning(self):
@@ -109,7 +113,8 @@ class ServiceBase(object):
     def __read_url(self):
         
         Service_logger.info("Reading website: {}".format(self.url))
-        self.page = urllib2.urlopen(self.url)
+        req = urllib2.Request(self.url, headers=self.headers)
+        self.page = urllib2.urlopen(req)
         
     def __parse_html(self):
         

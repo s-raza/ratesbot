@@ -44,6 +44,6 @@ logger.addHandler(handler)
 
 
 ##Root logger logging level
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 
