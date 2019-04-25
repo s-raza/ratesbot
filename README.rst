@@ -31,9 +31,9 @@ Once you have the token, update the Config.py file with it.
 
 **Install dependencies using pip**
 
-.. code:: shell
-
+```
     $ pip install python-telegram-bot sqlalchemy schedule bs4 requests mysql-python urllib2 colorlog
+```
 
 **Write Your First Service**
 
@@ -47,27 +47,27 @@ Examples of 2 sources that provide gold rates are available in *RatesBot.Service
 
 Time in minutes can be specified when running the bot from the command line. Once the below command is run, the bot will cycle through all the services that were defined as derived classes of the *ServiceBase* class, every number of minutes as specified. If there is a change in the rates a message will be sent to the Telegram user or group which was specified in the Config.py file.
 
-.. code:: shell
-
+```
     $ python start_bot.py -m <time in minutes>
+```
 
 E.g. - To check the rates from the services every 10 minutes
 
-.. code:: shell
-
+```
     $ python start_bot.py -m 10
-    
+```
+  
 If the -m switch is not provided as shown below, the default frequency of checking the rates will be 5 minutes.
 
-.. code:: shell
-
+```
     $ python start_bot.py
+```
 
 =====
 TO DO
 =====
 1. Refactor code to comply with Python PEP 8
-2. Implement a better method for registering new sources whose rates need to be tracked. This needs to be more efficient, automated and programmer firendly.
+2. Implement a better method for registering new sources whose rates need to be tracked. This needs to be more efficient, automated and programmer friendly.
 3. Add tests for the services.
 4. Installation script to implement automated start-up and shut-down of the bot with the OS (systemctl)
 5. Log all quries to online sources and their results to file (/var/log/ratesbot)
@@ -76,7 +76,7 @@ TO DO
 ============
 CONTRIBUTING
 ============
-Contributions in any form are welcome. It can be anything from correcting grammer or spellings in the documentation to adding a new service or tests. Our goal here is to make something robust that would benefit someone in anyway.
+Contributions in any form are welcome. It can be anything from correcting grammer or spellings in the documentation to adding a new service or tests. Our goal here is to make something robust and useful.
 
 =======
 LICENSE
