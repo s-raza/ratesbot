@@ -35,7 +35,7 @@ Once you have the token, update the Config.py file with it.
 
 **Write Your First Service**
 
-Inherit the class *ServiceBase* which is available in *RatesBot.Services.Service* and override the *__init__()* and *get_rates()* methods to implement the extraction of rates from a web source for something that needs to be tracked. The rates can be taken from any online source like a website or an API that may be available for a service.
+Inherit the class *ServiceBase* which is available in *RatesBot.Services.Service* and override the *init()* and *get_rates()* methods to implement the extraction of rates from a web source for something that needs to be tracked. The rates can be taken from any online source like a website or an API that may be available for a service.
 
 Make sure that the *get_rate* method populates the fields - *_rate_morning, _rate_evening, _prices_text* and returns *prices_text*.
 
@@ -67,7 +67,7 @@ If the -m switch is not provided as shown below, the default frequency of checki
 2. Implement a better method for registering new sources whose rates need to be tracked. This needs to be more efficient, automated and programmer friendly.
 3. Add tests for the services.
 4. Installation script to implement automated start-up and shut-down of the bot with the OS (systemctl)
-5. Log all quries to online sources and their results to file (/var/log/ratesbot)
+5. Log all queries to online sources and their results to file (/var/log/ratesbot)
 6. Web interface for analysing the rates stored in the MySQL database (flask, matplotlib)
 
 
