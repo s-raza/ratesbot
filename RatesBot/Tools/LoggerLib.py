@@ -22,7 +22,7 @@ import colorlog
 import logging
 
 formatter = colorlog.ColoredFormatter(
-    "%(asctime)s %(log_color)s%(levelname)-8s %(name)s %(funcName)s()-%(lineno)s %(reset)s %(message)s",
+    "%(asctime)s %(log_color)s%(levelname)s %(name)s-%(lineno)s %(reset)s %(message)s",
     datefmt='%d%b%y %I:%M:%S%p',
     reset=True,
     log_colors={
