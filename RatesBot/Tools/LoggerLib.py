@@ -21,8 +21,16 @@
 import colorlog
 import logging
 
+from RatesBot.Tools.Kwargs import Kwargs
+
+debug_levels = {"d":logging.DEBUG,
+                "i":logging.INFO,
+                "w":logging.WARNING,
+                "e":logging.ERROR,
+                "c":logging.CRITICAL}
+
 formatter = colorlog.ColoredFormatter(
-    "%(asctime)s %(log_color)s%(levelname)s %(name)s-%(lineno)s %(reset)s %(message)s",
+    "%(asctime)s %(log_color)s%(levelname)-2s %(name)s-%(lineno)s: %(message)s",
     datefmt='%d%b%y %I:%M:%S%p',
     reset=True,
     log_colors={
@@ -45,5 +53,45 @@ logger.addHandler(handler)
 
 ##Root logger logging level
 logger.setLevel(logging.INFO)
+
+def get_debug_level(level):
+
+    retval = None
+
+    if level is None:
+        pass
+    elif level in debug_levels:
+        retval = debug_levels[level]
+    else:
+        pass
+
+    return retval
+
+class Logger(Kwargs):
+
+    def __init__(self,*args, **kwargs):
+        super(Logger, self).__init__(*args, **kwargs)
+
+        self.logger = colorlog.getLogger(self.__class__.__name__)
+        self.logger.disabled = True
+        self.debug_level = self.init_kwarg('debug_level')
+        self.debug_levels = debug_levels
+                            
+        if self.debug_level:
+            self.logger.setLevel(get_debug_level(self.debug_level))
+            self.logger.disabled = False
+            
+    def get_debug_level(self,level):
+        
+        retval = None
+
+        if level is None:
+            pass
+        elif level in self.debug_levels:
+            retval = self.debug_levels[level]
+        else:
+            pass
+
+        return retval      
 
 

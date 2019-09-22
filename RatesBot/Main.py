@@ -20,12 +20,13 @@
 
 import schedule
 import time
-from Rates.GetRates import check_rates
+from Rates.GetRates import RateChecker
 
 def main(freq_mins=5):
 
-    check_rates()
-    schedule.every(freq_mins).minutes.do(check_rates)
+    rates = RateChecker(debug_level='d')
+    rates.check_rates()
+    schedule.every(freq_mins).minutes.do(rates.check_rates)
 
     while 1:
 

@@ -22,32 +22,31 @@ from RatesBot.Services.Service import *
 import telegram
 import RatesBot.Config as cfg
 
-Rates_logger = colorlog.getLogger('RatesBot.GetRates')
-#Service_logger.setLevel(logging.DEBUG)
+class RateChecker(Logger):
 
-bot = telegram.Bot(token=cfg.bot_token)
-chat_id = cfg.chat_id
+    def __init__(self, *args, **kwargs):
+        super(RateChecker, self).__init__(*args, **kwargs)
 
+        self.bot = telegram.Bot(token=cfg.bot_token)
+        self.chat_id = cfg.chat_id
 
-
-def check_rates():
-    '''
-    Execute scraping and parsing of each service. If rates have changed since last checking, send a telegram message.
-    This is done for each of the services implemented as a dervied class of the ServiceBase class.
-    '''
-        
-    for service in ServiceBase.__subclasses__():
-        
-        srv = service(total_units = cfg.total_units)
-        
-        srv.get_rates()
-        
-        if srv.rates_changed():
-            Rates_logger.info("Rates changed: {}".format(srv.service_name))
-            Rates_logger.info("Sending Message: {}".format(srv.prices_text))
-            bot.send_message(chat_id=chat_id, text=srv.prices_text)
-        else:
-            Rates_logger.info("Rates not Changed ({})".format(srv.service_name))
+    def check_rates(self):
+        '''
+        Execute scraping and parsing of each service. If rates have changed since last checking, send a telegram message.
+        This is done for each of the services implemented as a dervied class of the ServiceBase class.
+        '''
+            
+        for service in ServiceBase.__subclasses__():
+            
+            srv = service(total_units = cfg.total_units, debug_level=self.debug_level)
+            srv.get_rates()
+            
+            if srv.rates_changed():
+                self.logger.info("Rates changed: {}".format(srv.service_name))
+                self.logger.info("Sending Message: {}".format(srv.prices_text))
+                self.bot.send_message(chat_id=self.chat_id, text=srv.prices_text)
+            else:
+                self.logger.info("Rates not Changed ({})".format(srv.service_name))
             
             
                 
