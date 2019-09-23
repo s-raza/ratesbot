@@ -72,7 +72,7 @@ class Logger(Kwargs):
     def __init__(self,*args, **kwargs):
         super(Logger, self).__init__(*args, **kwargs)
 
-        self.logger = colorlog.getLogger(self.__class__.__name__)
+        self.logger = colorlog.getLogger('.'.join([self.__module__,self.__class__.__name__]))
         self.logger.disabled = True
         self.debug_level = self.init_kwarg('debug_level')
         self.debug_levels = debug_levels

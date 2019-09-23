@@ -22,10 +22,11 @@ from RatesBot.DB.Models import *
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from RatesBot.Tools.LoggerLib import *
+from RatesBot.Tools.Kwargs import Kwargs
 from RatesBot.Tools.ScreenColors import clr
 import RatesBot.Config as cfg
 
-class RatesDB(Logger):
+class RatesDB(Logger, Kwargs):
     
     def __init__(self, *args, **kwargs):
         super(RatesDB, self).__init__(*args, **kwargs)

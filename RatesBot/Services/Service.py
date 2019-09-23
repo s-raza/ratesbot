@@ -18,13 +18,14 @@
 # You should have received a copy of the GNU General Public License along with this program.
 # If not, see <https://www.gnu.org/licenses/>
 from RatesBot.Tools.LoggerLib import *
+from RatesBot.Tools.Kwargs import Kwargs
 from RatesBot.Tools.ScreenColors import clr
 from bs4 import BeautifulSoup
 import urllib2
 from RatesBot.DB.RatesDB import RatesDB
 import RatesBot.Config as cfg
 
-class ServiceBase(Logger):
+class ServiceBase(Logger, Kwargs):
     '''Common base class for all services that provide rates'''
     
     def __init__(self, *args, **kwargs):

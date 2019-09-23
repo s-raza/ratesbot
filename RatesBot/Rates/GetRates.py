@@ -19,10 +19,12 @@
 # If not, see <https://www.gnu.org/licenses/>
 
 from RatesBot.Services.Service import *
+from RatesBot.Tools.LoggerLib import *
+from RatesBot.Tools.Kwargs import Kwargs
 import telegram
 import RatesBot.Config as cfg
 
-class RateChecker(Logger):
+class RateChecker(Logger, Kwargs):
 
     def __init__(self, *args, **kwargs):
         super(RateChecker, self).__init__(*args, **kwargs)
