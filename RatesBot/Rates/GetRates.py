@@ -27,8 +27,8 @@ class RateChecker(Logger):
     def __init__(self, *args, **kwargs):
         super(RateChecker, self).__init__(*args, **kwargs)
 
-        self.bot = telegram.Bot(token=cfg.bot_token)
-        self.chat_id = cfg.chat_id
+        self.bot = telegram.Bot(token=cfg.telegram['bot_token'])
+        self.chat_id = cfg.telegram['chat_id']
 
     def check_rates(self):
         '''

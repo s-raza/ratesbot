@@ -38,7 +38,7 @@ class ServiceBase(Logger):
         self._rate_morning = 0.00
         self._rate_evening = 0.00
         self._prices_text = ""
-        self.db = RatesDB(db_uname=cfg.db['uname'],db_pass=cfg.db['pass'],db_host=cfg.db['host'],db_name=cfg.db['name'])
+        self.db = RatesDB(conn_string=cfg.db['conn_string'])
         self.user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
         self.headers = {'User-Agent':self.user_agent,} 
 

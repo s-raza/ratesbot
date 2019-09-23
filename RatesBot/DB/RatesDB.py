@@ -30,12 +30,13 @@ class RatesDB(Logger):
     def __init__(self, *args, **kwargs):
         super(RatesDB, self).__init__(*args, **kwargs)
         
-        self.db_uname = self.init_kwarg('db_uname', default="ratesuser") 
-        self.db_pass = self.init_kwarg('db_pass', default="ratesuserpass")
-        self.db_host = self.init_kwarg('db_host', default="localhost")
-        self.db_name = self.init_kwarg('db_name', default="ratesdb")
+        # self.db_uname = self.init_kwarg('db_uname', default="ratesuser") 
+        # self.db_pass = self.init_kwarg('db_pass', default="ratesuserpass")
+        # self.db_host = self.init_kwarg('db_host', default="localhost")
+        # self.db_name = self.init_kwarg('db_name', default="ratesdb")
         
-        self.conn_str = "mysql+mysqldb://{}:{}@{}/{}?charset=utf8mb4".format(self.db_uname, self.db_pass, self.db_host, self.db_name)
+        # self.conn_str = "mysql+mysqldb://{}:{}@{}/{}?charset=utf8mb4".format(self.db_uname, self.db_pass, self.db_host, self.db_name)
+        self.conn_str = self.init_kwarg('conn_string')
         self.engine = create_engine(self.conn_str)
         self.base = Base
         self.base.metadata.create_all(self.engine)
