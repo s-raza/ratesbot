@@ -30,12 +30,6 @@ class RatesDB(Logger):
     def __init__(self, *args, **kwargs):
         super(RatesDB, self).__init__(*args, **kwargs)
         
-        # self.db_uname = self.init_kwarg('db_uname', default="ratesuser") 
-        # self.db_pass = self.init_kwarg('db_pass', default="ratesuserpass")
-        # self.db_host = self.init_kwarg('db_host', default="localhost")
-        # self.db_name = self.init_kwarg('db_name', default="ratesdb")
-        
-        # self.conn_str = "mysql+mysqldb://{}:{}@{}/{}?charset=utf8mb4".format(self.db_uname, self.db_pass, self.db_host, self.db_name)
         self.conn_str = self.init_kwarg('conn_string')
         self.engine = create_engine(self.conn_str)
         self.base = Base
@@ -59,6 +53,7 @@ class RatesDB(Logger):
         
         inst = Service(name=service_name, url=url)
         self.session.add(inst)
+        self.session.commit()
         
         return inst
         
@@ -66,9 +61,12 @@ class RatesDB(Logger):
         '''Query the database to get the last row inserted into the database'''
         
         service_inst = self.__get_service_inst(service)
-        last_insert = self.session.query(Rate).filter(Rate.id == self.session.query(func.max(Rate.id)).filter(Rate.service_id==service_inst.id)).one()
+        last_insert = self.session.query(Rate).filter(Rate.id == self.session.query(func.max(Rate.id)).filter(Rate.service_id==service_inst.id)).first()
         
-        return [last_insert.rate_morning,last_insert.rate_evening]
+        if last_insert is not None:
+            return [last_insert.rate_morning,last_insert.rate_evening]
+        else:
+            return [0.00,0.00]
         
     def insert_rate(self, service):
         '''Insert rates into the database, which were queried from the service'''
