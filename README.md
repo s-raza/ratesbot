@@ -10,7 +10,7 @@ For demonstration, the program currently scrapes 2 websites - www.khaleejtimes.c
 2. Rates are logged to a MySQL database everytime they change (SQLAlchemy). This can be used for statistical analysis later.
 3. Extensible. New source websites for tradeable can be added by extending the RatesBot.Services.Service.ServiceBase base class.
 4. Basic testing using pytest.
-5. Configuration file for specifying :
+5. Configuration file in JSON for specifying :
    - Token for Telegram bot
    - Id of the chat(user or group) where the notification of a rate change will be sent
    - Database details for connecting to a MySQL database
@@ -31,6 +31,35 @@ Once you have the token, update the Config.py file with it.
 
 ```
     $ pip install python-telegram-bot sqlalchemy schedule bs4 requests mysql-python urllib2 colorlog
+```
+
+**Configure Settings**
+
+Place a JSON file in the home directory of the user that will be executing the script at the location - "~/.config/ratesbot/config.json"
+
+Following is the structure of the JSON file. Update as required.
+
+```
+{
+    "telegram":
+    {
+        "bot_token": "<telegram bot token>",
+        "chat_id": <id of the chat that should receive the notifications>
+    },
+    "db":
+    {   
+        "dialect": "mysql+mysqldb",
+        "uname": "ratesuser",
+        "password": "ratesuserpass",
+        "host": "localhost",
+        "dbname": "ratesdb",
+        "port": null,
+        "options": {"charset" : "utf8mb4"},
+        "sqlalchemy_options" : {"pool_recycle" : 3600}
+    },
+    "total_units": <total number of units >
+}
+
 ```
 
 **Write Your First Service**

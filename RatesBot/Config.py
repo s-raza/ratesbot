@@ -37,7 +37,7 @@ def get_engine_string():
             
             retval=retval+"?"
             
-            for opt,val in db['options'].iteritems():
+            for opt,val in db['options'].items():
                 retval = retval + opt + "=" + val + "&"
     else:
 
@@ -48,7 +48,7 @@ def get_engine_string():
 
 def load_config():
     
-    with open(os.path.abspath('../config.json')) as data:
+    with open(os.path.expanduser('~/.config/ratesbot/config.json')) as data:
         config = json.load(data)
 
     globals().update(config)

@@ -21,7 +21,7 @@ from RatesBot.Tools.LoggerLib import *
 from RatesBot.Tools.Kwargs import Kwargs
 from RatesBot.Tools.ScreenColors import clr
 from bs4 import BeautifulSoup
-import urllib2
+import urllib.request
 from RatesBot.DB.RatesDB import RatesDB
 import RatesBot.Config as cfg
 
@@ -87,14 +87,15 @@ class ServiceBase(Logger, Kwargs):
     def __read_url(self):
         
         self.logger.info("Reading website: {}".format(self.url))
-        req = urllib2.Request(self.url, headers=self.headers)
-        self.page = urllib2.urlopen(req)
+        req = urllib.request.Request(self.url, headers=self.headers)
+        response = urllib.request.urlopen(req)
+        self.page = response.read()
         
     def __parse_html(self):
         
         self.logger.info("Parsing HTML: {}".format(self.url))
         
-        self.soup = BeautifulSoup(self.page.read(),features="html.parser")
+        self.soup = BeautifulSoup(self.page,features="html.parser")
 
     def db_save(self):
         '''Save rates to the database'''

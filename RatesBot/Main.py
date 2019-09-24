@@ -20,7 +20,7 @@
 
 import schedule
 import time
-from Rates.GetRates import RateChecker
+from RatesBot.Rates.GetRates import RateChecker
 
 def main(freq_mins=5):
 
@@ -33,6 +33,6 @@ def main(freq_mins=5):
         try:
             schedule.run_pending()
             time.sleep(1)
-        except Exception, e:
+        except Exception(e):
             print("Exception : {}".format(e))
             continue
