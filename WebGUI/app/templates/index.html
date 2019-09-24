@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title>Get rates for a date</title>
+    </head>
+    <body>
+        <div>
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <table>
+                    <tr>
+                        <td>
+                                {{ form.for_date.label }} : 
+                                {{ form.for_date(size=32) }}<br>
+                                {% for error in form.for_date.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                                {% endfor %}
+                        </td>
+                        <td>
+                            {{ form.submit() }}
+                        </td>
+                    </tr>
+            </table>
+            </form>
+        </div>
+        <div>
+        {% block content %}{% endblock %}
+    </div>
+    </body>
+</html>

@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+{% block content %}
+        <div>
+            {% if for_date %}
+            RATES FOR DATE : {{ for_date }}</br>
+            {% endif %}
+            {% if between %}
+            <strong>Rates between dates : {{ between[0] }} to {{ between[1] }}</strong></br>
+            {% endif %}
+            {% for srv, rates in services.items() %}
+        </br>Service: {{ srv }}:</br></br>
+                {% for rate in rates %}
+                    [{{ rate.rate_date }}] Rate Morning: {{ rate.rate_morning }} , Rate Evening: {{ rate.rate_evening }}</br>
+                {% endfor %}
+            {% endfor %}
+        </div>
+{% endblock %}
