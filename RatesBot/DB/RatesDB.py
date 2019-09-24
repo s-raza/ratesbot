@@ -19,7 +19,7 @@
 # If not, see <https://www.gnu.org/licenses/>
 
 from RatesBot.DB.Models import *
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 from sqlalchemy.orm import scoped_session, sessionmaker
 from RatesBot.Tools.LoggerLib import *
 from RatesBot.Tools.Kwargs import Kwargs
@@ -37,7 +37,7 @@ class RatesDB(Logger, Kwargs):
         self.base.metadata.create_all(self.engine)
         self.session = scoped_session( sessionmaker(bind=self.engine) )
         
-    def __get_service_inst(self, service):
+    def __get_or_create_service_inst(self, service):
         
         '''Get the instance of a service from the database, create it if it does not exist by name.'''
         
@@ -48,6 +48,18 @@ class RatesDB(Logger, Kwargs):
             return new_service
         else:
             return service_inst
+
+    def __get_service_inst(self, service):
+        
+        '''Get the instance of a service from the database'''
+        
+        service_inst = self.session.query(Service).filter_by(name=service.service_name).first()
+        
+        if service_inst is not None:
+            return service_inst
+        else:
+            return None
+            
         
     def __add_service(self, service_name, url):
         '''Insert a new service in the databse'''
@@ -61,18 +73,44 @@ class RatesDB(Logger, Kwargs):
     def get_last_rates(self, service):
         '''Query the database to get the last row inserted into the database'''
         
-        service_inst = self.__get_service_inst(service)
+        service_inst = self.__get_or_create_service_inst(service)
         last_insert = self.session.query(Rate).filter(Rate.id == self.session.query(func.max(Rate.id)).filter(Rate.service_id==service_inst.id)).first()
         
         if last_insert is not None:
             return [last_insert.rate_morning,last_insert.rate_evening]
         else:
             return [0.00,0.00]
-        
+
+    def get_rates_on_date(self, service, on_date):
+
+        rates = self.session.query(Rate) \
+                    .join(Service) \
+                    .filter(Service.name == service.service_name) \
+                    .filter(func.date(Rate.rate_date) == on_date) \
+                    .all() \
+
+        if rates is not None:
+            return rates
+        else:
+            return None
+
+    def get_rates_between_dates(self, service, from_date, to_date):
+    
+        rates = self.session.query(Rate) \
+                    .join(Service) \
+                    .filter(Service.name == service.service_name) \
+                    .filter(Rate.rate_date.between(from_date,to_date)) \
+                    .all()
+
+        if rates is not None:
+            return rates
+        else:
+            return None
+
     def insert_rate(self, service):
         '''Insert rates into the database, which were queried from the service'''
         
-        service_inst = self.__get_service_inst(service)
+        service_inst = self.__get_or_create_service_inst(service)
         service_inst.rates.append(Rate(rate_morning=service.rate_morning, rate_evening=service.rate_evening))
         self.session.commit()
 
