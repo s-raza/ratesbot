@@ -6,6 +6,7 @@ import RatesBot.Config as cfg
 from RatesBot.DB.RatesDB import RatesDB
 from RatesBot.Services.Service import *
 from datetime import timedelta
+import random
 
 
 def get_rates(for_date, to_date):
@@ -29,6 +30,39 @@ def get_rates(for_date, to_date):
 
     return services
 
+
+def get_plot_data(services):
+
+    plot = {}
+    colors = ['red','blue']
+    color_used = []
+    js_datasets = []
+
+    for service,rates in services.items():
+        lst = []
+        for rate in rates:
+            lst.append("{{x:'{}', y:{} }}".format(rate.rate_date.strftime('%Y-%m-%d %H:%M:%S'),rate.rate_morning))
+        plot[service] = {}
+
+        # Ensure that the color of lines representing a service do not have the same color
+        while True:
+            selected_color = random.choice(colors)
+
+            if selected_color not in color_used:
+                plot[service]['color'] = selected_color
+                color_used.append(selected_color)
+                break
+
+        plot[service]['data'] = "[" + ",".join(lst) + "]"
+        jsvar = service.replace(" ","")
+        plot[service]['jsvar'] = jsvar
+        js_datasets.append(jsvar)
+
+    retval = {'services': plot, 'datasets': "[" + ",".join(js_datasets) + "]"}
+
+    return retval
+
+
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     form = RatesForm()
@@ -41,9 +75,10 @@ def index():
         return render_template('index.html', form=form)
 
     if form.validate_on_submit():
+        rates_for_services = get_rates(for_date,to_date)
+        plot_data = get_plot_data(rates_for_services)
         return render_template('graph.html',
-                                services=get_rates(for_date,to_date),
-                                for_dates=[for_date.strftime('%A %d/%m/%Y'),to_date.strftime('%A %d/%m/%Y')],
+                                services=plot_data,
                                 form=form)
     else:
         return render_template('index.html', form=form)

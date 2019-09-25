@@ -1,17 +1,34 @@
 {% extends "index.html" %}
 {% block content %}
-        <div>
-            {% if for_dates %}
-            RATES FOR DATE : {{ for_dates[0] }} to {{ for_dates[1] }}</br>
-            {% endif %}
-            {% if between %}
-            <strong>Rates between dates : {{ between[0] }} to {{ between[1] }}</strong></br>
-            {% endif %}
-            {% for srv, rates in services.items() %}
-        </br>Service: {{ srv }}:</br></br>
-                {% for rate in rates %}
-                    [{{ rate.rate_date }}] Rate Morning: {{ rate.rate_morning }} , Rate Evening: {{ rate.rate_evening }}</br>
-                {% endfor %}
-            {% endfor %}
-        </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+<canvas id="myChart"></canvas>
+
+<script>
+
+{% for srv, rates in services['services'].items() %}
+
+var {{ rates['jsvar'] }} = {
+  label: '{{ srv }}',
+  borderColor: '{{ rates['color'] }}',
+  data: {{ rates['data'] | safe }}
+};
+
+{% endfor %}
+
+var ctx = document.getElementById('myChart').getContext('2d');
+var chart = new Chart(ctx, {
+  type: 'line',
+  data: { datasets: {{ services['datasets'] }} },
+  options: {
+    scales: {
+      xAxes: [{
+        type: 'time',
+        distribution: 'series'
+      }]
+    }
+  }
+});
+
+</script>
 {% endblock %}
