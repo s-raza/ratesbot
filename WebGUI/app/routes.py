@@ -67,19 +67,25 @@ def get_plot_data(services):
 def index():
     form = RatesForm()
 
-    for_date = form.for_date.data
-    to_date = form.to_date.data
-
-    if for_date > to_date:
-        flash("'From date' cannot be greater than 'To date'")
-        return render_template('index.html', form=form)
-
     if form.validate_on_submit():
+        for_date = form.for_date.data
+        to_date = form.to_date.data
+
+        if for_date > to_date:
+            flash("'From date' cannot be greater than 'To date'")
+            return render_template('index.html', form=form)
+
+    
         rates_for_services = get_rates(for_date,to_date)
         plot_data = get_plot_data(rates_for_services)
-        return render_template('graph.html',
-                                services=plot_data,
-                                form=form)
+
     else:
-        return render_template('index.html', form=form)
+        for_date = form.for_date.default
+        to_date = form.to_date.default
+        rates_for_services = get_rates(for_date, to_date)
+        plot_data = get_plot_data(rates_for_services)
+    
+    return render_template('graph.html',
+                            services=plot_data,
+                            form=form)
 
