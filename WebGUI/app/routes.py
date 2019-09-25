@@ -68,16 +68,38 @@ def index():
     form = RatesForm()
 
     if form.validate_on_submit():
-        for_date = form.for_date.data
-        to_date = form.to_date.data
 
-        if for_date > to_date:
-            flash("'From date' cannot be greater than 'To date'")
-            return render_template('index.html', form=form)
+        if form.submit.data:
+            for_date = form.for_date.data
+            to_date = form.to_date.data
 
-    
-        rates_for_services = get_rates(for_date,to_date)
-        plot_data = get_plot_data(rates_for_services)
+            if for_date > to_date:
+                flash("'From date' cannot be greater than 'To date'")
+                return render_template('index.html', form=form)
+
+        
+            rates_for_services = get_rates(for_date,to_date)
+            plot_data = get_plot_data(rates_for_services)
+        
+        if form.last_1_week.data:
+            rates_for_services = get_rates(form.week_before,form.today)
+            plot_data = get_plot_data(rates_for_services)
+
+        if form.last_2_weeks.data:
+            rates_for_services = get_rates(form.two_weeks_before,form.today)
+            plot_data = get_plot_data(rates_for_services)
+
+        if form.last_30_days.data:
+            rates_for_services = get_rates(form.days30_before,form.today)
+            plot_data = get_plot_data(rates_for_services)
+
+        if form.last_45_days.data:
+            rates_for_services = get_rates(form.days45_before,form.today)
+            plot_data = get_plot_data(rates_for_services)
+
+        if form.last_60_days.data:
+            rates_for_services = get_rates(form.days60_before,form.today)
+            plot_data = get_plot_data(rates_for_services)
 
     else:
         for_date = form.for_date.default

@@ -24,6 +24,21 @@
                             {{ form.submit() }}
                         </td>
                         <td>
+                                {{ form.last_1_week() }}
+                        </td>
+                        <td>
+                                {{ form.last_2_weeks() }}
+                        </td>
+                        <td>
+                                {{ form.last_30_days }}
+                        </td>
+                        <td>
+                                {{ form.last_45_days }}
+                        </td>
+                        <td>
+                                {{ form.last_60_days }}
+                        </td>
+                        <td>
                             {% with messages = get_flashed_messages() %}
                             {% if messages %}
                             <ul>
