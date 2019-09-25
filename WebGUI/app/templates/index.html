@@ -10,13 +10,31 @@
                     <tr>
                         <td>
                                 {{ form.for_date.label }} : 
-                                {{ form.for_date(size=32) }}<br>
+                                {{ form.for_date(size=32) }}
+                                {{ form.to_date.label }} : 
+                                {{ form.to_date(size=32) }}<br>
                                 {% for error in form.for_date.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                                {% endfor %}
+                                {% for error in form.to_date.errors %}
                                 <span style="color: red;">[{{ error }}]</span>
                                 {% endfor %}
                         </td>
                         <td>
                             {{ form.submit() }}
+                        </td>
+                        <td>
+                            {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                            <ul>
+                                <span style="color: red;">
+                                {% for message in messages %}
+                                <li>{{ message }}</li>
+                                {% endfor %}
+                            </span>
+                            </ul>
+                            {% endif %}
+                            {% endwith %}
                         </td>
                     </tr>
             </table>
