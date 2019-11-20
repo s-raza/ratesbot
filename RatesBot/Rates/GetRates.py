@@ -37,6 +37,8 @@ class RateChecker(Logger, Kwargs):
         Execute scraping and parsing of each service. If rates have changed since last checking, send a telegram message.
         This is done for each of the services implemented as a dervied class of the ServiceBase class.
         '''
+
+        cfg.load_config()
             
         for service in ServiceBase.__subclasses__():
             
