@@ -23,12 +23,19 @@ from RatesBot.Tools.LoggerLib import *
 from RatesBot.Tools.ScreenColors import clr
 from RatesBot.DB.RatesDB import RatesDB
 from RatesBot.Services.Service import *
+import RatesBot.Config as cfg
 
 
 @pytest.fixture(scope="session")
 def db(request):
+
+    test_db = "ratesdb_test"
+
+    conn_string = cfg.db['conn_string'].replace(cfg.db['dbname'],test_db)
+
+    print(clr.red("\nConn String: {}\n".format(conn_string)))
         
-    db = RatesDB(db_name="ratesdb_test")
+    db = RatesDB(conn_string=conn_string)
     
     #Function for teardown operations
     def fin():
