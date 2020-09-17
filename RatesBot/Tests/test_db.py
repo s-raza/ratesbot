@@ -53,7 +53,7 @@ def function_tester(db,function, rate_morning=130.00, rate_evening=135.00):
         
         srv = service()
         
-        print clr.red("\n===TESTING [{}] - {}===\n".format(srv.service_name, function.__name__))
+        print(clr.red("\n===TESTING [{}] - {}===\n".format(srv.service_name, function.__name__)))
         
         srv.rate_morning = rate_morning
         srv.rate_evening = rate_evening
