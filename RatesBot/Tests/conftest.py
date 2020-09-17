@@ -33,12 +33,12 @@ def db(request):
     #Function for teardown operations
     def fin():
         
-        print clr.red("\n===Tearing down===\n")
+        print(clr.red("\n===Tearing down===\n"))
         db.session.close()
         db.session.remove()
         db.base.metadata.drop_all(db.engine)
         
-        print clr.red("\n===Executed drop_all on the DB===\n")
+        print(clr.red("\n===Executed drop_all on the DB===\n"))
         
     request.addfinalizer(fin)
     
