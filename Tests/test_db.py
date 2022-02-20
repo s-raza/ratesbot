@@ -25,7 +25,7 @@ from RatesBot.Services.Service import *
 from RatesBot.Tools.ScreenColors import clr
 
 
-def test_add_service(db):
+def test_db_session(db):
     
     assert db.session is not None
     
