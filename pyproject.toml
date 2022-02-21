@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "ratesbot"
+version = "0.1.0"
+description = "Simple telegram bot that can be used to track rates of tradeables (e.g. Gold) and send notifications on Telegram if the rate of a tradeable changes"
+authors = ["Salman Raza <raza.salman@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+colorlog = "^6.6.0"
+SQLAlchemy = "^1.4.31"
+beautifulsoup4 = "^4.10.0"
+schedule = "^1.1.0"
+python-telegram-bot = "^13.11"
+mysqlclient = "^2.1.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
