@@ -42,15 +42,24 @@ class RateChecker(Logger, Kwargs):
             
         for service in ServiceBase.__subclasses__():
             
-            srv = service(total_units = cfg.total_units, debug_level=self.debug_level)
-            srv.get_rates()
-            
-            if srv.rates_changed():
-                self.logger.info("Rates changed: {}".format(srv.service_name))
-                self.logger.info("Sending Message: {}".format(srv.prices_text))
-                self.bot.send_message(chat_id=self.chat_id, text=srv.prices_text)
-            else:
-                self.logger.info("Rates not Changed ({})".format(srv.service_name))
+            try:
+                srv = service(total_units = cfg.total_units, debug_level=self.debug_level)
+                srv.get_rates()
+                
+                if srv.rates_changed():
+                    self.logger.info("Rates changed: {}".format(srv.service_name))
+                    self.logger.info("Sending Message: {}".format(srv.prices_text))
+                    self.bot.send_message(chat_id=self.chat_id, text=srv.prices_text)
+                else:
+                    self.logger.info("Rates not Changed ({})".format(srv.service_name))
+
+            except Exception as e:
+
+                error = '\n\n'.join(e.args)
+                msg = f"Error ({srv.service_name}):\n\n{error}"
+                
+                self.logger.error(msg)
+                self.bot.send_message(chat_id=self.chat_id, text=msg)
             
             
                 
