@@ -149,26 +149,37 @@ class KTRates(ServiceBase):
         service_name = "Khaleej Times"
         super(KTRates, self).__init__(url=url, service_name=service_name, *args, **kwargs)
         
+    def get_rates_dict(self, table):
+        
+        headings = [h.text for h in table.thead.tr.findAll("th")]
+        body = table.tbody.findAll("tr")
+        rates = {}
+
+        for tr in body:
+    
+            type = tr.th.text
+            rates[type] = {}
+            
+            tds = tr.findAll("td")
+            
+            for i, heading in enumerate(headings[1:]):
+                rates[type][heading] = tds[i].text.strip()
+        
+        return rates
+        
     def get_rates(self):
     
         super(KTRates, self).get_rates()
         
-        for i in self.soup.findAll('tr',{'class':'gold_r1'}):
-
-            if "22" in i.td.text:
-                rates = i.text.replace(" ","").replace("\r\n","").strip().split("\n")
-                break
+        divs = self.soup.findAll('article', {'class': 'draft-rates-wrapper'})
+        rates_dict = self.get_rates_dict(divs[1].table)
+        rates_22k = rates_dict["22K"]
         
-        self._prices_text += "\n{} gold prices updated\n".format(self.service_name)
+        self._prices_text += f"\n{self.service_name} gold prices updated\n"
+        self._prices_text += f"\nMorning - {rates_22k['MORNING']}\nEvening - {rates_22k['EVENING']}\nYesterday - {rates_22k['YESTERDAY']}"
         
-        if len(rates) == 5:
-           self._prices_text += "\nMorning - {}\nEvening - {}\nYesterday - {}".format(rates[1], rates[2], rates[4])
-    
-        if len(rates) == 4:
-            self._prices_text += "\nMorning - {}\nEvening - {}\nYesterday - {}".format(rates[1], rates[2], rates[3])
-        
-        self._rate_morning = self.format_rate(rates[1])
-        self._rate_evening = self.format_rate(rates[2])
+        self._rate_morning = self.format_rate(rates_22k["MORNING"])
+        self._rate_evening = self.format_rate(rates_22k["EVENING"])
         
         return self.prices_text
 
