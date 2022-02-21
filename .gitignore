@@ -11,3 +11,8 @@ __pycache__/
 # Other version control files
 .svn/
 
+# Notebooks
+*.ipynb
+
+# vscode
+.vscode/

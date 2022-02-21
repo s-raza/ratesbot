@@ -70,11 +70,11 @@ class ServiceBase(Logger, Kwargs):
         
     @property
     def value_text_morning(self):
-        return "\n\nTotal Value ({} units @ {}) : {}".format(self.total_units, self._rate_morning, self.current_value_morning)
+        return f"\n\nTotal Value ({self.total_units} units @ {self._rate_morning}) : {self.current_value_morning}"
     
     @property
     def value_text_evening(self):
-        return "\n\nTotal Value ({} units @ {}) : {}".format(self.total_units, self._rate_evening, self.current_value_evening)
+        return f"\n\nTotal Value ({self.total_units} units @ {self._rate_evening}) : {self.current_value_evening}"
     
     @property
     def value_text(self):
@@ -86,14 +86,14 @@ class ServiceBase(Logger, Kwargs):
     
     def __read_url(self):
         
-        self.logger.info("Reading website: {}".format(self.url))
+        self.logger.info(f"Reading website: {self.url}")
         req = urllib.request.Request(self.url, headers=self.headers)
         response = urllib.request.urlopen(req)
         self.page = response.read()
         
     def __parse_html(self):
         
-        self.logger.info("Parsing HTML: {}".format(self.url))
+        self.logger.info(f"Parsing HTML: {self.url}")
         
         self.soup = BeautifulSoup(self.page,features="html.parser")
 
@@ -111,7 +111,7 @@ class ServiceBase(Logger, Kwargs):
         last_rates = self.db.get_last_rates(self)
         self.db.session.close()
         self.db.session.remove()
-        self.logger.debug("Last rates from DB: {}".format(str(last_rates)))
+        self.logger.debug(f"Last rates from DB: {str(last_rates)}")
         
         return last_rates
 
@@ -127,7 +127,7 @@ class ServiceBase(Logger, Kwargs):
     def rates_changed(self):
         '''Check latest rates from a service and compare to saved rates from last time the rates were checked.'''
 
-        self.logger.debug("Current rates from {} : {}".format(self.service_name, "[{}, {}]".format(self.rate_morning,self.rate_evening)))
+        self.logger.debug(f"Current rates from {self.service_name} : [{self.rate_morning}, {self.rate_evening}]")
 
         if [self.rate_morning,self.rate_evening] == self.db_last_rates():
             return False
@@ -149,26 +149,37 @@ class KTRates(ServiceBase):
         service_name = "Khaleej Times"
         super(KTRates, self).__init__(url=url, service_name=service_name, *args, **kwargs)
         
+    def get_rates_dict(self, table):
+        
+        headings = [h.text for h in table.thead.tr.findAll("th")]
+        body = table.tbody.findAll("tr")
+        rates = {}
+
+        for tr in body:
+    
+            type_ = tr.th.text
+            rates[type_] = {}
+            
+            tds = tr.findAll("td")
+            
+            for i, heading in enumerate(headings[1:]):
+                rates[type_][heading] = tds[i].text.strip()
+        
+        return rates
+        
     def get_rates(self):
     
         super(KTRates, self).get_rates()
         
-        for i in self.soup.findAll('tr',{'class':'gold_r1'}):
-
-            if "22" in i.td.text:
-                rates = i.text.replace(" ","").replace("\r\n","").strip().split("\n")
-                break
+        divs = self.soup.findAll('article', {'class': 'draft-rates-wrapper'})
+        rates_dict = self.get_rates_dict(divs[1].table)
+        rates_22k = rates_dict["22K"]
         
-        self._prices_text += "\n{} gold prices updated\n".format(self.service_name)
+        self._prices_text += f"\n{self.service_name} gold prices updated\n"
+        self._prices_text += f"\nMorning - {rates_22k['MORNING']}\nEvening - {rates_22k['EVENING']}\nYesterday - {rates_22k['YESTERDAY']}"
         
-        if len(rates) == 5:
-           self._prices_text += "\nMorning - {}\nEvening - {}\nYesterday - {}".format(rates[1], rates[2], rates[4])
-    
-        if len(rates) == 4:
-            self._prices_text += "\nMorning - {}\nEvening - {}\nYesterday - {}".format(rates[1], rates[2], rates[3])
-        
-        self._rate_morning = self.format_rate(rates[1])
-        self._rate_evening = self.format_rate(rates[2])
+        self._rate_morning = self.format_rate(rates_22k["MORNING"])
+        self._rate_evening = self.format_rate(rates_22k["EVENING"])
         
         return self.prices_text
 
@@ -187,8 +198,8 @@ class GPDRates(ServiceBase):
         super(GPDRates, self).get_rates()
         
         rates = [txt.text for txt in self.soup.findAll('table',{'class':'now'})[0].findChildren('tr')[4].findChildren('td')]
-        self._prices_text += "\n{} gold prices updated\n".format(self.service_name)
-        self._prices_text += "\nRate - {}".format(rates[0])
+        self._prices_text += f"\n{self.service_name} gold prices updated\n"
+        self._prices_text += f"\nRate - {rates[0]}"
         self._rate_morning = self.format_rate(rates[0])
         self._rate_evening = 0.00
         
