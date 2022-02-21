@@ -157,13 +157,13 @@ class KTRates(ServiceBase):
 
         for tr in body:
     
-            type = tr.th.text
-            rates[type] = {}
+            type_ = tr.th.text
+            rates[type_] = {}
             
             tds = tr.findAll("td")
             
             for i, heading in enumerate(headings[1:]):
-                rates[type][heading] = tds[i].text.strip()
+                rates[type_][heading] = tds[i].text.strip()
         
         return rates
         
