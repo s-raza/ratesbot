@@ -33,6 +33,6 @@ def main(freq_mins=5):
         try:
             schedule.run_pending()
             time.sleep(1)
-        except Exception(e):
-            print("Exception : {}".format(e))
+        except Exception as e:
+            print("Exception : {}".format(e.args))
             continue
